@@ -2,10 +2,16 @@ module "main"
 
 include "node_modules/noscript/yate/noscript.yate"
 
+match .head ns-view-add-class {
+    " island head"
+}
+
 match .head ns-view-content {
-    <hr/>
     "The head is in the head"
-    <hr/>
+}
+
+match .content ns-view-add-class {
+    " island"
 }
 
 match .index ns-view-content {
