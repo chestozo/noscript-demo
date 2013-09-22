@@ -3,9 +3,18 @@ module "main"
 include "node_modules/noscript/yate/noscript.yate"
 
 match .head ns-view-content {
+    <hr/>
     "The head is in the head"
+    <hr/>
 }
 
 match .index ns-view-content {
     "Hi, this is index page"
+    <br/>
+    <br/>
+    <a href="{ ns-url('/next') }">Go to the next page</a>
+}
+
+match .next ns-view-content {
+    "Next is here!"
 }

@@ -1,8 +1,16 @@
-all: yate
+STYLUS = node_modules/.bin/stylus
+YATE = node_modules/.bin/yate
+
+all: yate css
 
 yate: templates.yate.js
 
 templates.yate.js: templates.yate
-	node_modules/.bin/yate $< > $@
+	$(YATE) $< > $@
 
-.PHONY: install all yate
+css: all.css
+
+all.css: all.styl
+	$(STYLUS) --resolve-url all.styl
+
+.PHONY: install all yate css
