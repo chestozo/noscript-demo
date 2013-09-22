@@ -7,7 +7,7 @@ match .head ns-view-add-class {
 }
 
 match .head ns-view-content {
-    "The head is in the head"
+    "Шапка: она не меняется от страницы к странице"
 }
 
 match .content ns-view-add-class {
@@ -15,12 +15,27 @@ match .content ns-view-add-class {
 }
 
 match .index ns-view-content {
-    "Hi, this is index page"
+    "Это индекс страница. На ней ничего нет."
     <br/>
     <br/>
-    <a href="{ ns-url('/next') }">Go to the next page</a>
+    "Зато можно перейти к "
+    <a href="{ ns-url('/photos') }">следующей странице</a>
+    "."
 }
 
-match .next ns-view-content {
-    "Next is here!"
+match .photos ns-view-content {
+    "К примеру, вот фотки:"
+    <br/>
+    for /.models.photos.images.image {
+        <a href="{ ns-url('/photos/' + .id) }">
+            <img class="image-thumb" src="{ .url_ }XXS"/>
+        </a>
+    }
+}
+
+match .photo-preview ns-view-content {
+    "А вот и превью:"
+    <br/>
+    <br/>
+    <img src="{ /.models.photo.url_ }L"/>
 }
