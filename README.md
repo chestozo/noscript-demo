@@ -5,6 +5,7 @@
 ```
 git clone git@github.com:chestozo/noscript-demo.git noscript-demo
 cd noscript-demo
+npm install
 make
 ```
 
