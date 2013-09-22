@@ -12,4 +12,4 @@ make
 - файлы лежат в директории `~/reps/noscript-demo`
 - эта папка видна через браузер как `http://localhost/reps/noscript-demo`
 
-Открываем `http://localhost/reps/noscript-demo/` (**важно**, что на конце указан слеш).
+Открываем `http://localhost/reps/noscript-demo/` (важно, что на конце указан слеш).
