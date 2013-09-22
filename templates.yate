@@ -1,0 +1,11 @@
+module "main"
+
+include "node_modules/noscript/yate/noscript.yate"
+
+match .head ns-view-content {
+    "The head is in the head"
+}
+
+match .index ns-view-content {
+    "Hi, this is index page"
+}
