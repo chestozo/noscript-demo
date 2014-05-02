@@ -5,6 +5,8 @@
     - fix extensions (не видит ns - потому что ns должен быть в window ...)
 */
 
+var fs = require('fs');
+var jsdom = require('jsdom');
 var ns = require('noscript');
 
 var yr = require('./node_modules/yate/lib/yate.js');
@@ -15,34 +17,39 @@ require('./app.layouts.js');
 require('./app.models.js');
 require('./app.views.js');
 
+var div;
+
 ns.tmpl = function(json, mode, module) {
     var ext_filename = './node_modules/noscript/yate/noscript-yate-externals.js';
     var template_file = './templates.yate';
 
-    var html = yr.run(template_file, { data: json }, ext_filename, mode);`
+    var result = yr.run(template_file, { data: json }, ext_filename, mode);
+    return ns.html2node(result);
 
-    console.log('RESULT', result);
+    // div.innerHTML = html;
 
-    return null; // ns.html2node(result);
+    // var node = $(div).find('.ns-root')[0];
+    // return node;
 };
 
-var initFakeMainView = function() {
-    var mainView = ns.View.create('app');
-    var fakeNode = {}; // document.getElementById('app')
-    mainView._setNode(fakeNode);
-    mainView.invalidate();
+// var initFakeMainView = function() {
+//     var mainView = ns.View.create('app');
+//     mainView._setNode(div);
+//     mainView.invalidate();
 
-    /**
-     * Корневой View.
-     * @type {ns.View}
-     */
-    ns.MAIN_VIEW = mainView;
-};
+//     /**
+//      * Корневой View.
+//      * @type {ns.View}
+//      */
+//     ns.MAIN_VIEW = mainView;
+// };
 
 var processRequest = function(req, res) {
     // Из всей инициализации нужен только роутер.
     ns.router.init();
-    initFakeMainView();
+    ns.initMainView();
+
+    // initFakeMainView();
 
     // TODO брать урл из запроса.
     var url = '/photos/1';
@@ -57,28 +64,32 @@ var processRequest = function(req, res) {
     var layout = ns.layout.page(route.page, route.params);
 
     var update = new ns.Update(ns.MAIN_VIEW, layout, route.params);
-    update.start();
+    var promise = update.start();
 
-    // ns.page.go();
+    promise.done(function() {
+        console.log(ns.MAIN_VIEW.node.outerHTML);
 
-    // разрезолвить урл в params
-    // выбрать лэйаут
-    // запросить нужные данные
-    // построить дерево
-    // из шаблонизатора получить строку.
-
-
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.end('Hello');
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end(ns.MAIN_VIEW.node.outerHTML);
+    });
 };
 
+jsdom.env(
+    fs.readFileSync('./index.html', 'utf-8'),
+    [ 'http://code.jquery.com/jquery.js' ],
+    function (errors, window) {
+        global.$ = window.$;
+        global.window = window;
+        global.document = window.document;
 
+        ns.View.$window = $(window);
+        ns.View.$document = $(document);
 
-
-
-require('http')
-    .createServer(processRequest)
-    .listen(2014);
+        require('http')
+            .createServer(processRequest)
+            .listen(2014);
+    }
+);
 
 // ----------------------------------------------------------------------------------------------------------------- //
 
