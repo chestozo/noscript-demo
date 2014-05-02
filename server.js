@@ -2,19 +2,47 @@
     TODO
     - поддержка авторизованного / неавторизованного
     - redirect
+    - fix extensions (не видит ns - потому что ns должен быть в window ...)
 */
 
-var ns = ns || require('noscript');
+var ns = require('noscript');
+
+var yr = require('./node_modules/yate/lib/yate.js');
+require('./node_modules/yate/lib/actions.js');
+
 require('./app.routes.js');
 require('./app.layouts.js');
 require('./app.models.js');
 require('./app.views.js');
 
-var resolvePage
+ns.tmpl = function(json, mode, module) {
+    var ext_filename = './node_modules/noscript/yate/noscript-yate-externals.js';
+    var template_file = './templates.yate';
+
+    var html = yr.run(template_file, { data: json }, ext_filename, mode);`
+
+    console.log('RESULT', result);
+
+    return null; // ns.html2node(result);
+};
+
+var initFakeMainView = function() {
+    var mainView = ns.View.create('app');
+    var fakeNode = {}; // document.getElementById('app')
+    mainView._setNode(fakeNode);
+    mainView.invalidate();
+
+    /**
+     * Корневой View.
+     * @type {ns.View}
+     */
+    ns.MAIN_VIEW = mainView;
+};
 
 var processRequest = function(req, res) {
     // Из всей инициализации нужен только роутер.
     ns.router.init();
+    initFakeMainView();
 
     // TODO брать урл из запроса.
     var url = '/photos/1';
@@ -28,10 +56,8 @@ var processRequest = function(req, res) {
     var route = ns.router(url);
     var layout = ns.layout.page(route.page, route.params);
 
-    // var update = new ns.Update(ns.MAIN_VIEW, layout, route.params);
-    // return update.start();
-
-
+    var update = new ns.Update(ns.MAIN_VIEW, layout, route.params);
+    update.start();
 
     // ns.page.go();
 
