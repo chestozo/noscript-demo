@@ -1,6 +1,8 @@
 var ns = ns || require('noscript');
-require('./app.routes.js')
-require('./app.layouts.js')
+require('./app.routes.js');
+require('./app.layouts.js');
+require('./app.models.js');
+// require('./app.views.js')
 
 /*
     TODO
