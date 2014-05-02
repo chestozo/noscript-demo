@@ -1,5 +1,6 @@
 var ns = ns || require('noscript');
 require('./app.routes.js')
+require('./app.layouts.js')
 
 /*
     TODO
