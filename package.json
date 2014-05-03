@@ -1,18 +1,17 @@
 {
-    "name": "noscript-demo",
-    "description": "demo",
-    "version": "0.0.1",
-    "private": true,
-
-    "dependencies": {
-        "es5-shim": "*",
-        "yate": "0.0.60",
-        "nommon": "*",
-        "noscript": "git://github.com/pasaran/noscript.git#collection.disperse"
-    },
-
-    "devDependencies": {
-        "stylus": "0.36.x",
-        "sinon": "*"
-    }
+  "name": "noscript-demo",
+  "description": "demo",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "es5-shim": "*",
+    "yate": "git://github.com/chestozo/yate.git#yate.on.server",
+    "nommon": "*",
+    "noscript": "git://github.com/yandex-ui/noscript.git#server.render.92",
+    "request": "~2.34.0"
+  },
+  "devDependencies": {
+    "stylus": "0.36.x",
+    "sinon": "*"
+  }
 }
