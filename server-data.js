@@ -5,11 +5,23 @@ var photos = [
 ];
 
 var processRequest = function(req, res) {
-    var models = [];
+    var data = { models: [] };
+    var models = data.models;
+
     switch (req.url) {
-        case '/models?_m.0=photo&_model.0=photo&photo-id.0=1':
-            models.push(photos[0]);
+        case '/?_m=photos':
+            models.push({
+                data: {
+                    images: {
+                        image: photos
+                    }
+                }
+            });
             break;
+
+        case '/?_m=photo&_model.0=photo&photo-id.0=1': models.push({ data: photos[0] }); break;
+        case '/?_m=photo&_model.0=photo&photo-id.0=2': models.push({ data: photos[1] }); break;
+        case '/?_m=photo&_model.0=photo&photo-id.0=3': models.push({ data: photos[2] }); break;
     }
 
     res.writeHead(
@@ -18,7 +30,7 @@ var processRequest = function(req, res) {
             'Access-Control-Allow-Origin': '*'
         }
     );
-    res.end(JSON.stringify(models));
+    res.end(JSON.stringify(data));
 };
 
 require('http')

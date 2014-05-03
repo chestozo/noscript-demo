@@ -11,7 +11,7 @@ ns.Model.define('photos', {
         items: '.images.image',
         model_id: 'photo',
         params: {
-            'id': '.id'
+            'image-id': '.id'
         }
     }
 });
