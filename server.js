@@ -1,8 +1,7 @@
 /*
     TODO
-    - http запросы
-    - redirect
-    - поддержка авторизованного / неавторизованного
+    - поддержка redirect от ns.router
+    - поддержка заголовков в http запросах (про авторизованного / неавторизованного)
 */
 
 var fs = require('fs');
@@ -27,8 +26,14 @@ ns.tmpl = function(json, mode, module) {
 
 ns.http = function(url, params, options) {
     var promise = new no.Promise();
-    request.post(
-        { url: url, json: true, form: params },
+    var options = {
+        url: url,
+        json: true,
+        form: params,
+        // headers: headers
+    };
+
+    request.post(options,
         function(error, response, data) {
             if (!error && response.statusCode == 200) {
                 promise.resolve(data);
