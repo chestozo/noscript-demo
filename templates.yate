@@ -31,12 +31,16 @@ match .photos ns-view-collection {
     apply /.views.ns-view-collection-container.* ns-view
 }
 
+match .photos-item ns-view-add-class {
+    " image-thumb"
+}
+
 match .photos-item ns-view-content {
     // Use helper when you need some model: model(id).
     photo = model('photo')
 
     <a href="{ ns-url('/photos/' + photo.id) }">
-        <img class="image-thumb" src="{ photo.url_ }XXS"/>
+        <img src="{ photo.url_ }XXS"/>
     </a>
 }
 
