@@ -53,11 +53,18 @@ ns.Model.define('photos', {
 // Блоки (view).
 ns.View.define('app');
 ns.View.define('head');
+
 ns.View.define('index');
 
-// TODO make it collection
-ns.View.define('photos', {
-    models: [ 'photos' ]
+ns.View.define('photos-item', {
+    models: [ 'photo' ]
+});
+
+ns.ViewCollection.define('photos', {
+    models: [ 'photos' ],
+    split: {
+        view_id: 'photos-item'
+    }
 });
 
 ns.View.define('photo-preview', {

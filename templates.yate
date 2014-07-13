@@ -25,20 +25,23 @@ match .index ns-view-content {
 }
 
 // 2. Photo list page.
-match .photos ns-view-content {
+match .photos ns-view-collection {
     "К примеру, вот фотки:"
     <br/>
+    apply /.views.ns-view-collection-container.* ns-view
+}
+
+match .photos-item ns-view-content {
     // Use helper when you need some model: model(id).
-    for model('photos').images.image {
-        <a href="{ ns-url('/photos/' + .id) }">
-            <img class="image-thumb" src="{ .url_ }XXS"/>
-        </a>
-    }
+    photo = model('photo')
+
+    <a href="{ ns-url('/photos/' + photo.id) }">
+        <img class="image-thumb" src="{ photo.url_ }XXS"/>
+    </a>
 }
 
 // 3. Single photo page.
 match .photo-preview ns-view-content {
-    log(.)
     "А вот и превью:"
     <br/>
     <br/>
