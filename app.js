@@ -54,9 +54,12 @@ ns.Model.define('photos', {
 ns.View.define('app');
 ns.View.define('head');
 ns.View.define('index');
+
+// TODO make it collection
 ns.View.define('photos', {
     models: [ 'photos' ]
 });
+
 ns.View.define('photo-preview', {
     models: [ 'photo' ]
 });
