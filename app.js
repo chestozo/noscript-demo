@@ -63,7 +63,8 @@ ns.View.define('photos-item', {
 ns.ViewCollection.define('photos', {
     models: [ 'photos' ],
     split: {
-        view_id: 'photos-item'
+        byModel: 'photos',
+        intoViews: 'photos-item'
     }
 });
 

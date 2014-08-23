@@ -7,7 +7,7 @@
     "dependencies": {
         "es5-shim": "*",
         "yate": "0.0.60",
-        "noscript": "git://github.com/pasaran/noscript.git#master"
+        "noscript": "0.4.5"
     },
 
     "devDependencies": {
