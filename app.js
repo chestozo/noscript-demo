@@ -18,7 +18,10 @@ ns.layout.define('app', {
 });
 
 ns.layout.define('index', {
-    'app content@': 'index'
+    'app content@': {
+        'index': true,
+        'github-profile&': true
+    }
 }, 'app');
 
 ns.layout.define('photo', {
@@ -48,6 +51,22 @@ ns.Model.define('photos', {
     }
 });
 
+ns.Model.define('github-profile', {
+    params: {
+        'login': 'chestozo'
+    },
+    methods: {
+        request: function() {
+            return ns.http('https://api.github.com/users/{login}'.replace('{login}', this.params['login']), {}, { type: 'GET' })
+                .then(function(data) {
+                    this.setData(data);
+                }, function(error) {
+                    this.setError(error);
+                }, this);
+        }
+    }
+});
+
 // ----------------------------------------------------------------------------------------------------------------- //
 
 // Блоки (view).
@@ -55,6 +74,10 @@ ns.View.define('app');
 ns.View.define('head');
 
 ns.View.define('index');
+
+ns.View.define('github-profile', {
+    models: [ 'github-profile' ]
+});
 
 ns.View.define('photos-item', {
     models: [ 'photo' ]
@@ -88,9 +111,6 @@ photos.insert([
 var app = {};
 
 app.init = function() {
-    // Поскольку проект может лежать где угодно на файловой системе - инициализируем baseDir руками.
-    ns.router.baseDir = location.pathname.substr(0, location.pathname.length - 1);
-
     ns.init();
     ns.page.go();
 };
