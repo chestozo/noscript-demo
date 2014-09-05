@@ -3,6 +3,7 @@ ns.router.routes = {
     route: {
         '/photos/{image-id:int}': 'photo',
         '/photos': 'photo',
+        '/github/{login}': 'demo-github',
         '/': 'index'
     }
 };
@@ -18,9 +19,12 @@ ns.layout.define('app', {
 });
 
 ns.layout.define('index', {
+    'app content@': 'index'
+}, 'app');
+
+ns.layout.define('demo-github', {
     'app content@': {
-        'index': true,
-        'github-profile&': true
+        'github-profile': true
     }
 }, 'app');
 
