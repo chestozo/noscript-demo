@@ -8,9 +8,9 @@ yate: templates.yate.js
 templates.yate.js: templates.yate
 	$(YATE) $< > $@
 
-css: all.css
+css: css/all.css
 
-all.css: all.styl
-	$(STYLUS) --resolve-url all.styl
+css/all.css: css/all.styl
+	$(STYLUS) --resolve-url css/all.styl
 
 .PHONY: install all yate css
