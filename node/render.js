@@ -61,3 +61,42 @@ ns.http = function(url, params, options) {
 ns.renderString = function(json, mode, module) {
     return yr.run(module || 'main', json, mode);
 };
+
+
+///
+
+ph.renderPage = function(html) {
+    var initScript = '';
+
+    return '<!DOCTYPE html>' +
+    '<html>' +
+    '<head>' +
+        '<title>demo</title>' +
+        '<meta charset="utf-8">' +
+        '<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7,IE=edge">' +
+        '<link rel="stylesheet" href="/css/all.css">' +
+        '<script src="/js/jquery.min.js"></script>' +
+        '<script src="/node_modules/es5-shim/es5-shim.min.js"></script>' +
+        '<script src="/node_modules/yate/lib/runtime.js"></script>' +
+        '<script src="/node_modules/noscript/dist/noscript.js"></script>' +
+        '<script src="/node_modules/noscript/yate/noscript-yate-externals.js"></script>' +
+        '<script src="/templates.yate.js"></script>' +
+        '<script src="/js/models.js"></script>' +
+        '<script src="/js/views.js"></script>' +
+        '<script src="/js/layouts.js"></script>' +
+        '<script src="/js/routes.js"></script>' +
+        '<script src="/js/app.js"></script>' +
+    '</head>' +
+    '<body class="page-body">' +
+
+        html +
+        initScript +
+
+        // '<div id="app">' +
+        //     '<p style="margin: 3em 0; text-align: center;">' +
+        //         'Загрузка...' +
+        //     '</p>' +
+        // '</div>' +
+    '</body>' +
+    '</html>';
+};
