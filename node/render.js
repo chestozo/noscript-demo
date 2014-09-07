@@ -77,7 +77,7 @@ ph.renderPage = function(html, models) {
     }
 
     initScript = '<script>' +
-        'var __phInit = function() {' +
+        'var __nsInit = function() {' +
         initScript +
         '};' +
         '</script>';

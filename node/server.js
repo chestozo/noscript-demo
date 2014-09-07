@@ -1,3 +1,11 @@
+/**
+    TODO
+    - избавиться от ns-root обёртки
+    - множественный запуск
+    - fix всех FIXME
+    - использовать ns.update.reconstruct
+*/
+
 var vm = require('vm');
 var fs = require('fs');
 var path = require('path');
@@ -25,6 +33,7 @@ var processRequest = function(req, res) {
 
     var url = req.url;
 
+    // FIXME хардкодисто
     if (url !== '/github/suholet') {
         res.writeHead(404);
         res.end();
