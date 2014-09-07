@@ -1,18 +1,16 @@
-// <script src="/node_modules/yate/lib/runtime.js"></script>
-// <script src="/node_modules/noscript/yate/noscript-yate-externals.js"></script>
-// <script src="/templates.yate.js"></script>
-
 var path = require('path');
 var fs = require('fs');
 var vm = require('vm');
 var request = require('request');
+
 
 var global_variables = {
     no: no,
     ns: ns,
     require: require,
     console: console,
-    Vow: Vow
+    Vow: Vow,
+    yr: yr
 };
 
 // FIXME как-то это хреново. Лучше собирать скрипт для сервера видимо.
@@ -25,6 +23,9 @@ loadScript('../js/models.js');
 loadScript('../js/views.js');
 loadScript('../js/layouts.js');
 loadScript('../js/routes.js');
+
+loadScript('../node_modules/noscript/yate/noscript-yate-externals.js');
+loadScript('../templates.yate.js');
 
 ns.http = function(url, params, options) {
     var promise = new Vow.Promise();
@@ -54,4 +55,9 @@ ns.http = function(url, params, options) {
         }
     );
     return promise;
+};
+
+// FIXME как-то не очень опять определять это всё :)
+ns.renderString = function(json, mode, module) {
+    return yr.run(module || 'main', json, mode);
 };
