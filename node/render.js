@@ -62,11 +62,12 @@ ns.renderString = function(json, mode, module) {
     return yr.run(module || 'main', json, mode);
 };
 
-
 ///
 
-ph.renderPage = function(html) {
+ph.renderPage = function(html, models) {
     var initScript = '';
+
+    // console.log('models', models);
 
     return '<!DOCTYPE html>' +
     '<html>' +
