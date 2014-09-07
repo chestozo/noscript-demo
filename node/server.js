@@ -2,6 +2,7 @@ var vm = require('vm');
 var fs = require('fs');
 var path = require('path');
 
+var Vow = require('../node_modules/noscript/node_modules/vow/lib/vow.js');
 var no = require('../node_modules/noscript/node_modules/nommon/lib/index.js');
 var noscript = require('../node_modules/noscript/dist/noscript.module.js');
 
@@ -14,7 +15,8 @@ var processRequest = function(req, res) {
         no: no,
         ns: ns,
         require: require,
-        console: console
+        console: console,
+        Vow: Vow
     };
 
     vm.runInNewContext(script, global_variables);
@@ -34,20 +36,27 @@ var processRequest = function(req, res) {
     var layout = ns.layout.page(route.page, route.params);
     var update = new ns.Update(ns.MAIN_VIEW, layout, route.params);
 
-    console.log(!!update);
+    update.prefetch()
+        .then(function(result) {
+            // var tree = {
+            //     'views': {}
+            // };
+            // update.view._getUpdateTree(tree, update.layout.views, update.params);
+            // renderTree.client.models = renderTree.client.models.concat(context.state.prefetch || [])
+            // renderTree.tree = tree;
+            // result.resolve(new de.Result.Value(renderTree));
 
-    // update.prefetch().then(function(res) {
-    //     var tree = {
-    //         'views': {}
-    //     };
-    //     update.view._getUpdateTree(tree, update.layout.views, update.params);
-    //     renderTree.client.models = renderTree.client.models.concat(context.state.prefetch || [])
-    //     renderTree.tree = tree;
-    //     result.resolve(new de.Result.Value(renderTree));
-    // });
+            // console.log(res);
 
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.end('Hi');
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.end('Hi');
+        })
+        .fail(function() {
+            res.writeHead(400);
+        });
+
+    // res.writeHead(200, { 'Content-Type': 'text/html' });
+    // res.end('Hi');
 };
 
 require('http')

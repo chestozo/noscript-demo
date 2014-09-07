@@ -5,12 +5,14 @@
 var path = require('path');
 var fs = require('fs');
 var vm = require('vm');
+var request = require('request');
 
 var global_variables = {
     no: no,
     ns: ns,
     require: require,
-    console: console
+    console: console,
+    Vow: Vow
 };
 
 // FIXME как-то это хреново. Лучше собирать скрипт для сервера видимо.
@@ -26,21 +28,27 @@ loadScript('../js/routes.js');
 
 ns.http = function(url, params, options) {
     var promise = new Vow.Promise();
+
+    // FIXME fake headers for demo to work with GitHub API.
+    var headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.94 Safari/537.36'
+    };
+
     var options = {
         url: url,
         json: true,
         form: params,
-        // headers: headers
+        headers: headers
     };
 
-    request.post(options,
+    request.get(options,
         function(error, response, data) {
             if (!error && response.statusCode == 200) {
                 promise.fulfill(data);
             } else {
-                var error = errorThrown || textStatus || 'unknown error';
                 promise.fulfill({
-                    error: 'fail'
+                    error: 'fail',
+                    body: JSON.stringify()
                 });
             }
         }
