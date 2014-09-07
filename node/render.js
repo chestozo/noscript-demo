@@ -66,8 +66,21 @@ ns.renderString = function(json, mode, module) {
 
 ph.renderPage = function(html, models) {
     var initScript = '';
+    var model;
 
-    // console.log('models', models);
+    for (var i = 0; i < models.length; i++) {
+        model = models[i];
+        initScript += "ns.Model.get('%id%', %params%).setData(%data%);"
+            .replace('%id%', model.id)
+            .replace('%params%', JSON.stringify(model.params))
+            .replace('%data%', JSON.stringify(model.getData()));
+    }
+
+    initScript = '<script>' +
+        'var __phInit = function() {' +
+        initScript +
+        '};' +
+        '</script>';
 
     return '<!DOCTYPE html>' +
     '<html>' +
