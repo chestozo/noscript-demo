@@ -40,7 +40,7 @@ ns.http = function(url, params, options) {
 ns.renderString = function(json, mode, module) {
     if (mode == null) {
         mode = 'server-render';
-        json['server-render-models'] = ph.models.map(function(m) {
+        json['server-render-models'] = renderContext.models.map(function(m) {
             return {
                 id: m.id,
                 paramsString: JSON.stringify(m.params),
