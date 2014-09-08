@@ -143,4 +143,22 @@ ns.http = function(url, params, options) {
     );
     return promise;
 };
+
+// FIXME не очень хорошо, но так мы можем отрендерить всю страницу на сервере.
+ns.renderString = function(json, mode, module) {
+    if (mode == null) {
+        mode = 'server-render';
+        json['server-render-models'] = ph.models.map(function(m) {
+            return {
+                id: m.id,
+                paramsString: JSON.stringify(m.params),
+                dataString: JSON.stringify(m.getData())
+            };
+        });
+    } else {
+        // FIXME этого не должно быть, потому что на сервере рендеринг запускается один раз для синхронных видов.
+    }
+
+    return yr.run(module || 'main', json, mode);
+};
 /* node/server.render.js: end */

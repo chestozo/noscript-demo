@@ -2,6 +2,48 @@ module "main"
 
 include "node_modules/noscript/yate/noscript.yate"
 
+// ----------------------------------------------------------------------------------------------------------------- //
+
+// Рендеринг всей страницы на сервере.
+match / server-render {
+    html('<!DOCTYPE html>')
+    <html>
+    <head>
+        <title>demo</title>
+        <meta charset="utf-8"></meta>
+        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7,IE=edge"></meta>
+        <link rel="stylesheet" href="/css/all.css"></link>
+        <script src="/js/jquery.min.js"></script>
+        <script src="/node_modules/es5-shim/es5-shim.min.js"></script>
+        <script src="/node_modules/yate/lib/runtime.js"></script>
+        <script src="/node_modules/noscript/dist/noscript.js"></script>
+        <script src="/node_modules/noscript/yate/noscript-yate-externals.js"></script>
+        <script src="/templates.yate.js"></script>
+        <script src="/js/models.js"></script>
+        <script src="/js/views.js"></script>
+        <script src="/js/layouts.js"></script>
+        <script src="/js/routes.js"></script>
+        <script src="/js/app.js"></script>
+    </head>
+    <body class="page-body">
+        apply .views.* ns-view
+        apply .server-render-models server-render-init-script
+    </body>
+    </html>
+}
+
+match .server-render-models server-render-init-script {
+    <script>
+    'var __nsInit = function() {{\n'
+    for . {
+        'ns.Model.get(\'{ .id }\', { .paramsString }).setData({ .dataString });\n'
+    }
+    '}};'
+    </script>
+}
+
+// ----------------------------------------------------------------------------------------------------------------- //
+
 match .head ns-view-add-class {
     " island head"
 }

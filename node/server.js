@@ -1,14 +1,12 @@
 /**
     TODO
-    - избавиться от ns-root обёртки (надо всю страницу рендерить в yate)
-    - fix всех FIXME
     - использовать ns.update.reconstruct
+    - fix всех FIXME
 */
 
 var vm = require('vm');
 var fs = require('fs');
 var path = require('path');
-var ph = {};
 
 var Vow = require('../node_modules/noscript/node_modules/vow/lib/vow.js');
 var no = require('../node_modules/noscript/node_modules/nommon/lib/index.js');
@@ -17,59 +15,8 @@ var noscript = require('../node_modules/noscript/dist/noscript.module.js');
 // FIXME может быть это и ок, что мы добавляем yr в global. Иначе не работает рендеринг (ns не видит yr).
 var yr = global.yr = require('./build/server.yate.js');
 
-// FIXME это надо один раз добавлять
-var renderPage = function(html, models) {
-    var initScript = '';
-    var model;
-
-    for (var i = 0; i < models.length; i++) {
-        model = models[i];
-        initScript += "ns.Model.get('%id%', %params%).setData(%data%);"
-            .replace('%id%', model.id)
-            .replace('%params%', JSON.stringify(model.params))
-            .replace('%data%', JSON.stringify(model.getData()));
-    }
-
-    initScript = '<script>' +
-        'var __nsInit = function() {' +
-        initScript +
-        '};' +
-        '</script>';
-
-    return '<!DOCTYPE html>' +
-    '<html>' +
-    '<head>' +
-        '<title>demo</title>' +
-        '<meta charset="utf-8">' +
-        '<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7,IE=edge">' +
-        '<link rel="stylesheet" href="/css/all.css">' +
-        '<script src="/js/jquery.min.js"></script>' +
-        '<script src="/node_modules/es5-shim/es5-shim.min.js"></script>' +
-        '<script src="/node_modules/yate/lib/runtime.js"></script>' +
-        '<script src="/node_modules/noscript/dist/noscript.js"></script>' +
-        '<script src="/node_modules/noscript/yate/noscript-yate-externals.js"></script>' +
-        '<script src="/templates.yate.js"></script>' +
-        '<script src="/js/models.js"></script>' +
-        '<script src="/js/views.js"></script>' +
-        '<script src="/js/layouts.js"></script>' +
-        '<script src="/js/routes.js"></script>' +
-        '<script src="/js/app.js"></script>' +
-    '</head>' +
-    '<body class="page-body">' +
-
-        html +
-        initScript +
-
-        // '<div id="app">' +
-        //     '<p style="margin: 3em 0; text-align: center;">' +
-        //         'Загрузка...' +
-        //     '</p>' +
-        // '</div>' +
-    '</body>' +
-    '</html>';
-};
-
 var processRequest = function(req, res) {
+    var ph = {};
     var ns = noscript();
     var script = fs.readFileSync(path.resolve(__dirname, './build/server.render.js'), 'utf-8');
 
@@ -79,7 +26,8 @@ var processRequest = function(req, res) {
         require: require,
         console: console,
         Vow: Vow,
-        yr: yr
+        yr: yr,
+        ph: ph
     };
 
     var url = req.url;
@@ -107,6 +55,10 @@ var processRequest = function(req, res) {
 
         modelsPromise = update._requestSyncModels();
         modelsPromise
+            .then(function(models) {
+                ph.models = models;
+                return modelsPromise;
+            })
             .then(update._generateHTML, null, update)
             .then(update._fulfill, update._reject, update);
 
@@ -114,17 +66,15 @@ var processRequest = function(req, res) {
     };
 
     generateHTML(update)
-        .then(function(result) {
+        .then(function(html) {
             res.writeHead(200, { 'Content-Type': 'text/html' });
-            res.end(renderPage(result, modelsPromise.valueOf()));
+            res.end(html);
         })
         .fail(function() {
+            console.error(arguments);
             res.writeHead(400);
             res.end();
         });
-
-    // res.writeHead(200, { 'Content-Type': 'text/html' });
-    // res.end('Hi');
 };
 
 require('http')
