@@ -1,6 +1,5 @@
 /**
     TODO
-    - множественный запуск
     - избавиться от ns-root обёртки
     - fix всех FIXME
     - использовать ns.update.reconstruct
@@ -15,7 +14,8 @@ var Vow = require('../node_modules/noscript/node_modules/vow/lib/vow.js');
 var no = require('../node_modules/noscript/node_modules/nommon/lib/index.js');
 var noscript = require('../node_modules/noscript/dist/noscript.module.js');
 
-var yr = require('./build/server.yate.js');
+// FIXME может быть это и ок, что мы добавляем yr в global. Иначе не работает рендеринг (ns не видит yr).
+var yr = global.yr = require('./build/server.yate.js');
 
 // FIXME это надо один раз добавлять
 var renderPage = function(html, models) {
