@@ -1,7 +1,7 @@
 /**
     TODO
-    - избавиться от ns-root обёртки
     - множественный запуск
+    - избавиться от ns-root обёртки
     - fix всех FIXME
     - использовать ns.update.reconstruct
 */
@@ -11,24 +11,75 @@ var fs = require('fs');
 var path = require('path');
 var ph = {};
 
-var yr = require('../node_modules/yate/lib/runtime.js');
 var Vow = require('../node_modules/noscript/node_modules/vow/lib/vow.js');
 var no = require('../node_modules/noscript/node_modules/nommon/lib/index.js');
 var noscript = require('../node_modules/noscript/dist/noscript.module.js');
 
+var yr = require('./build/server.yate.js');
+
+// FIXME это надо один раз добавлять
+var renderPage = function(html, models) {
+    var initScript = '';
+    var model;
+
+    for (var i = 0; i < models.length; i++) {
+        model = models[i];
+        initScript += "ns.Model.get('%id%', %params%).setData(%data%);"
+            .replace('%id%', model.id)
+            .replace('%params%', JSON.stringify(model.params))
+            .replace('%data%', JSON.stringify(model.getData()));
+    }
+
+    initScript = '<script>' +
+        'var __nsInit = function() {' +
+        initScript +
+        '};' +
+        '</script>';
+
+    return '<!DOCTYPE html>' +
+    '<html>' +
+    '<head>' +
+        '<title>demo</title>' +
+        '<meta charset="utf-8">' +
+        '<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7,IE=edge">' +
+        '<link rel="stylesheet" href="/css/all.css">' +
+        '<script src="/js/jquery.min.js"></script>' +
+        '<script src="/node_modules/es5-shim/es5-shim.min.js"></script>' +
+        '<script src="/node_modules/yate/lib/runtime.js"></script>' +
+        '<script src="/node_modules/noscript/dist/noscript.js"></script>' +
+        '<script src="/node_modules/noscript/yate/noscript-yate-externals.js"></script>' +
+        '<script src="/templates.yate.js"></script>' +
+        '<script src="/js/models.js"></script>' +
+        '<script src="/js/views.js"></script>' +
+        '<script src="/js/layouts.js"></script>' +
+        '<script src="/js/routes.js"></script>' +
+        '<script src="/js/app.js"></script>' +
+    '</head>' +
+    '<body class="page-body">' +
+
+        html +
+        initScript +
+
+        // '<div id="app">' +
+        //     '<p style="margin: 3em 0; text-align: center;">' +
+        //         'Загрузка...' +
+        //     '</p>' +
+        // '</div>' +
+    '</body>' +
+    '</html>';
+};
+
 var processRequest = function(req, res) {
     var ns = noscript();
-    var script = fs.readFileSync(path.resolve(__dirname, './render.js'), 'utf-8');
+    var script = fs.readFileSync(path.resolve(__dirname, './build/server.render.js'), 'utf-8');
 
     var global_variables = {
-        __dirname: __dirname,
         no: no,
         ns: ns,
         require: require,
         console: console,
         Vow: Vow,
-        yr: yr,
-        ph: ph
+        yr: yr
     };
 
     var url = req.url;
@@ -40,7 +91,8 @@ var processRequest = function(req, res) {
         return;
     }
 
-    vm.runInNewContext(script, global_variables);
+    var context = vm.createContext(global_variables);
+    vm.runInContext(script, context);
 
     ns.router.init();
     ns.MAIN_VIEW = ns.View.create('app');
@@ -64,7 +116,7 @@ var processRequest = function(req, res) {
     generateHTML(update)
         .then(function(result) {
             res.writeHead(200, { 'Content-Type': 'text/html' });
-            res.end(ph.renderPage(result, modelsPromise.valueOf()));
+            res.end(renderPage(result, modelsPromise.valueOf()));
         })
         .fail(function() {
             res.writeHead(400);
