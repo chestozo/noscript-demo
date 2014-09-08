@@ -1,6 +1,6 @@
 /**
     TODO
-    - избавиться от ns-root обёртки
+    - избавиться от ns-root обёртки (надо всю страницу рендерить в yate)
     - fix всех FIXME
     - использовать ns.update.reconstruct
 */
