@@ -1,6 +1,7 @@
 /**
     TODO
     - использовать ns.update.reconstruct
+    - всё работает и без серверного рендеринга (проверить)
     - fix всех FIXME
     - fix title render ?
 */

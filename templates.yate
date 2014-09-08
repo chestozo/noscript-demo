@@ -26,16 +26,25 @@ match / server-render {
         <script src="/js/app.js"></script>
     </head>
     <body class="page-body">
-        apply .views.* ns-view
-        apply .server-render-models server-render-init-script
+        apply . server-render-body
     </body>
     </html>
 }
 
-match .server-render-models server-render-init-script {
+match .* server-render-body {
+    <div id="app">
+        <p style="margin: 3em 0; text-align: center;">
+            'Загрузка...'
+        </p>
+    </div>
+}
+
+match .*[ .server-render ] server-render-body {
+    apply .views.* ns-view
+
     <script>
     'var __nsInit = function() {{\n'
-    for . {
+    for .server-render-models {
         'ns.Model.get(\'{ .id }\', { .paramsString }).setData({ .dataString });\n'
     }
     '}};'

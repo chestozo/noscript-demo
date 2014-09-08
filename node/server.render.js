@@ -40,6 +40,8 @@ ns.http = function(url, params, options) {
 ns.renderString = function(json, mode, module) {
     if (mode == null) {
         mode = 'server-render';
+
+        json['server-render'] = true;
         json['server-render-models'] = renderContext.models.map(function(m) {
             return {
                 id: m.id,
