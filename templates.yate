@@ -86,6 +86,11 @@ match .github-profile ns-view-content {
     profile = model('github-profile')
     <img src="{ profile.avatar_url }" width="60" style="display: inline-block; margin-right: 0.5em;" />
     <a href="{ profile.html_url }" style="vertical-align: top;">{ profile.login }</a>
+    <br/>
+    <br/>
+    <a href="/github/i2r">i2r@</a>
+    <br/><a href="/github/chestozo">chestozo@</a>
+    <br/><a href="/github/suholet">suholet@</a>
 }
 
 // 2. Photo list page.
