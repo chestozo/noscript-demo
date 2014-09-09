@@ -1,5 +1,5 @@
 node_modules
-*.yate.js
+template.yate.js
 *.yate.obj
 *.css
 .live*
