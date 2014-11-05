@@ -2,52 +2,22 @@ module "main"
 
 include "node_modules/noscript/yate/noscript.yate"
 
-match .head ns-view-add-class {
-    " island head"
-}
+match .a ns-view-content {
+    params1 = {
+        't': 'two'
+    }
+    params2 = {
+        't': 'three'
+    }
+    url1 = ns-generate-url('index', params1)
+    url2 = ns-generate-url('index', params2)
 
-match .head ns-view-content {
-    "Шапка: она не меняется от страницы к странице"
-}
-
-match .content ns-view-add-class {
-    " island"
-}
-
-// 1. Index page.
-match .index ns-view-content {
-    "Это индекс страница. На ней ничего нет."
+    'A'
     <br/>
-    <br/>
-    "Зато можно перейти к "
-    <a href="{ ns-url('/photos') }">следующей странице</a>
-    "."
+    <a href="{ url1 }">go1</a>
+    <a href="{ url2 }">go2</a>
 }
 
-// 2. Photo list page.
-match .photos ns-view-collection {
-    "К примеру, вот фотки:"
-    <br/>
-    apply /.views.ns-view-collection-container.* ns-view
-}
-
-match .photos-item ns-view-add-class {
-    " image-thumb"
-}
-
-match .photos-item ns-view-content {
-    // Use helper when you need some model: model(id).
-    photo = model('photo')
-
-    <a href="{ ns-url('/photos/' + photo.id) }">
-        <img src="{ photo.url_ }XXS"/>
-    </a>
-}
-
-// 3. Single photo page.
-match .photo-preview ns-view-content {
-    "А вот и превью:"
-    <br/>
-    <br/>
-    <img src="{ model('photo').url_ }L"/>
+match .b ns-view-content {
+    'B'
 }
