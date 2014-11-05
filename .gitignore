@@ -3,3 +3,4 @@ node_modules
 *.yate.obj
 *.css
 .live*
+.DS_Store
