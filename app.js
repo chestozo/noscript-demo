@@ -60,10 +60,16 @@ ns.View.define('head');
 ns.View.define('index');
 
 ns.View.define('react-view', {
+    events: {
+        'ns-view-htmlinit': 'onHtmlInit'
+    },
     methods: {
+        onHtmlInit: function() {
+            React.renderComponent(DemoComponent({}), this.node);
+        },
         renderIt: function() {
-            return 'YES';
-        }
+            return React.renderComponentToString(DemoComponent({}));
+        },
     }
 });
 
