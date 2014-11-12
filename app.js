@@ -18,7 +18,10 @@ ns.layout.define('app', {
 });
 
 ns.layout.define('index', {
-    'app content@': 'index'
+    'app content@': {
+        'index': null,
+        'react-view': null
+    }
 }, 'app');
 
 ns.layout.define('photo', {
@@ -55,6 +58,14 @@ ns.View.define('app');
 ns.View.define('head');
 
 ns.View.define('index');
+
+ns.View.define('react-view', {
+    methods: {
+        renderIt: function() {
+            return 'YES';
+        }
+    }
+});
 
 ns.View.define('photos-item', {
     models: [ 'photo' ]

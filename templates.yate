@@ -1,6 +1,7 @@
 module "main"
 
 include "node_modules/noscript/yate/noscript.yate"
+include "node_modules/noscript-bosphorus/noscript-bosphorus.yate"
 
 match .head ns-view-add-class {
     " island head"
@@ -50,4 +51,12 @@ match .photo-preview ns-view-content {
     <br/>
     <br/>
     <img src="{ model('photo').url_ }L"/>
+}
+
+match .react-view ns-view-content {
+    <br/>
+    <br/>
+    'React is cool'
+    ns-view-call('renderIt')
+
 }
