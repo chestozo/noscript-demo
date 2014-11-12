@@ -54,11 +54,6 @@ match .photo-preview ns-view-content {
 }
 
 match .react-view ns-view-content {
-    <br/>
-    <br/>
-    'React is cool:'
-    <br/>
-    <br/>
     _html = ns-view-call('renderIt')
     html(_html)
 }
