@@ -37,7 +37,7 @@ ns.View.define('react-view', {
 });
 ```
 
-Прописываем в шаблоне вызов метода вида:
+Прописываем в **yate**! шаблоне вызов метода вида:
 ```html
 match .react-view ns-view-content {
     _html = ns-view-call('renderComponent')
