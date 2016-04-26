@@ -29,6 +29,7 @@ match .photos ns-view-collection {
     "К примеру, вот фотки:"
     <br/>
     apply /.views.ns-view-collection-container.* ns-view
+    <a href="#test" class="js-test">Test</a>
 }
 
 match .photos-item ns-view-add-class {
@@ -39,9 +40,12 @@ match .photos-item ns-view-content {
     // Use helper when you need some model: model(id).
     photo = model('photo')
 
-    <a href="{ ns-url('/photos/' + photo.id) }">
-        <img src="{ photo.url_ }XXS"/>
-    </a>
+    <span>
+        <a href="{ ns-url('/photos/' + photo.id) }">
+            <img src="{ photo.url_ }XXS"/>
+        </a>
+        photo.title
+    </span>
 }
 
 // 3. Single photo page.

@@ -3,7 +3,8 @@ ns.router.routes = {
     route: {
         '/photos/{image-id:int}': 'photo',
         '/photos': 'photo',
-        '/': 'index'
+        // '/': 'index'
+        '/': 'photo'
     }
 };
 
@@ -61,10 +62,21 @@ ns.View.define('photos-item', {
 });
 
 ns.ViewCollection.define('photos', {
+    events: {
+        'click .js-test': 'runTest'
+    },
     models: [ 'photos' ],
     split: {
         byModel: 'photos',
         intoViews: 'photos-item'
+    },
+    methods: {
+        runTest: function() {
+            ns.Model.get('photo', { 'image-id': 2 }).set('.title', 'XXXXX');
+            ns.page.go();
+
+            return false;
+        }
     }
 });
 
@@ -77,9 +89,9 @@ ns.View.define('photo-preview', {
 // Тестовые данные.
 var photos = ns.Model.get('photos').setData({ images: { image: [] } });
 photos.insert([
-    ns.Model.get('photo', { 'image-id': 1 }).setData({ id: 1, url_: 'http://img-fotki.yandex.ru/get/4522/111182131.5/0_6358f_a0da1182_' }),
-    ns.Model.get('photo', { 'image-id': 2 }).setData({ id: 2, url_: 'http://img-fotki.yandex.ru/get/4417/31916371.16/0_5d295_d72044a2_' }),
-    ns.Model.get('photo', { 'image-id': 3 }).setData({ id: 3, url_: 'http://img-fotki.yandex.ru/get/4412/47303295.18/0_192ee2_9293c321_' })
+    ns.Model.get('photo', { 'image-id': 1 }).setData({ id: 1, title: 'One', url_: 'http://img-fotki.yandex.ru/get/4522/111182131.5/0_6358f_a0da1182_' }),
+    ns.Model.get('photo', { 'image-id': 2 }).setData({ id: 2, title: 'Two', url_: 'http://img-fotki.yandex.ru/get/4417/31916371.16/0_5d295_d72044a2_' }),
+    ns.Model.get('photo', { 'image-id': 3 }).setData({ id: 3, title: 'Three', url_: 'http://img-fotki.yandex.ru/get/4412/47303295.18/0_192ee2_9293c321_' })
 ]);
 
 // ----------------------------------------------------------------------------------------------------------------- //
