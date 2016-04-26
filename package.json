@@ -7,7 +7,7 @@
     "dependencies": {
         "es5-shim": "*",
         "yate": "0.0.60",
-        "noscript": "0.5.0"
+        "noscript": "*"
     },
 
     "devDependencies": {
