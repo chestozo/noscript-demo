@@ -18,7 +18,7 @@ make
 
 ## ns + react
 
-Чтобы подружить ns и react можно воспользоваться [noscript-bosphorus](https://github.com/yandex-ui/noscript-bosphorus).
+Чтобы подружить ns и react можно воспользоваться [noscript-react](https://github.com/yandex-ui/noscript-react).
 
 Декларируем вид:
 ```js
